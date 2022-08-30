@@ -25,8 +25,6 @@ void main() {
         dsgn += sign(dval);
     }
     
-    valinc /= dsgn;
-    noisepx *= valinc/nval;
     colors += noisepx;
     colors /= dsgn;
     gl_FragColor = vec4(colors, 1.0);
