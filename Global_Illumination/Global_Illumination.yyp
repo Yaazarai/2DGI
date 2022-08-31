@@ -1,7 +1,7 @@
 {
   "resources": [
     {"id":{"name":"Shd_DENOISE","path":"shaders/Shd_DENOISE/Shd_DENOISE.yy",},"order":7,},
-    {"id":{"name":"Shd_GOLDNSE","path":"shaders/Shd_GOLDNSE/Shd_GOLDNSE.yy",},"order":4,},
+    {"id":{"name":"Shd_FASTNSE","path":"shaders/Shd_FASTNSE/Shd_FASTNSE.yy",},"order":4,},
     {"id":{"name":"Shd_GILIGHT","path":"shaders/Shd_GILIGHT/Shd_GILIGHT.yy",},"order":6,},
     {"id":{"name":"Shd_DISTFLD","path":"shaders/Shd_DISTFLD/Shd_DISTFLD.yy",},"order":2,},
     {"id":{"name":"Shd_JUMPFLD","path":"shaders/Shd_JUMPFLD/Shd_JUMPFLD.yy",},"order":1,},

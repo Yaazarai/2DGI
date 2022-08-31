@@ -2,11 +2,11 @@ varying vec2 in_Coord;
 varying vec4 in_Color;
 uniform vec2      in_Resol;
 uniform sampler2D in_Distfld;
-uniform sampler2D in_Goldnse;
+uniform sampler2D in_Fastnse;
 
 #define TAU 6.2831853071795864769252867665590
-#define MAX_STEPS       64.0  // higher = accuracy, lower = efficiency
-#define RAYS_PER_PIXEL  32.0  // higher = accuracy, lower = efficiency
+#define MAX_STEPS       32.0  // higher = accuracy, lower = efficiency
+#define RAYS_PER_PIXEL  16.0  // higher = accuracy, lower = efficiency
 #define EPSILON         0.001 // floating point precision check
 
 float V2_F16(vec2 v) { return v.x + (v.y / 255.0); }
@@ -43,7 +43,7 @@ vec3 tonemap(vec3 color, float dist) {
 void main() {
     vec3  colors = vec3(0.0);
     float emissv = 0.0,
-        gnoise = texture2D(in_Goldnse, in_Coord).r,
+        gnoise = texture2D(in_Fastnse, in_Coord).r,
         gangle = gnoise * TAU;
     
     const float RAY_DELTA = TAU * (1.0/RAYS_PER_PIXEL);

@@ -7,7 +7,7 @@
         3a. [JMPFLDA] Jump flood pass A
         3b. [JMPFLDB] Jump flood pass B
     4. [DISTFLD] DF from Jump Flood
-    5. [GOLDNSE] Random noise texture
+    5. [FASTNSE] Random noise texture
     6. [GILIGHT] Scene Random Temporal Raymarch
     7. [POSTPRC] Post-Process Bloom
     8. [DENOISE] Denoise Post-Process GI scene.
@@ -25,21 +25,21 @@
             6c. Tonemap the final color for displaying to the surface.
         7. Apply bloom using additive blending [STAGE 7].
 */
-game_set_speed(gamespeed_fps, 120);
-enum GISTAGES { INITIAL, PREJUMP, JMPFLDA, JMPFLDB, DISTFLD, GOLDNSE, POSTPRC, DENOISE }
+game_set_speed(120, gamespeed_fps);
+enum GISTAGES { INITIAL, PREJUMP, JMPFLDA, JMPFLDB, DISTFLD, FASTNSE, POSTPRC, DENOISE }
 enum GISHADER {
     PREJUMP = Shd_PREJUMP, /* Pre-JumpFlood Setup */
     JUMPFLD = Shd_JUMPFLD, /* Jump Flood */
     DISTFLD = Shd_DISTFLD, /* Distance Field */
-    GOLDNSE = Shd_GOLDNSE, /* Random noise */
+    FASTNSE = Shd_FASTNSE, /* Random noise */
     GILIGHT = Shd_GILIGHT, /* Light bounce */
     DENOISE = Shd_DENOISE  /* Denoiser */
 }
 
 gistage_resw = 1920 / 4; // GI resolution
 gistage_resh = 1080 / 4; // GI resolution
-gistage_rndw = 1920 / 2; // GI upscale resolution
-gistage_rndh = 1080 / 2; // GI upscale resolution
+gistage_rndw = 1920; // GI upscale resolution
+gistage_rndh = 1080; // GI upscale resolution
 gistage_numb =    9; // GI stages count
 gistage_iter =    0; // GI temporal iterator
 gistage_tmpk =    2; // GI temporal count
@@ -56,11 +56,10 @@ gistage_curr =    0; // Current GI stage.
 // Grab shader variable uniforms for passing data to shaders.
 JUMPFLD_inJdist = shader_get_uniform(GISHADER.JUMPFLD, "in_Jdist");
 JUMPFLD_inResol = shader_get_uniform(GISHADER.JUMPFLD, "in_Resol");
-GOLDNSE_inTimer = shader_get_uniform(GISHADER.GOLDNSE, "in_Timer");
-GOLDNSE_inResol = shader_get_uniform(GISHADER.GOLDNSE, "in_Resol");
+FASTNSE_inTimer = shader_get_uniform(GISHADER.FASTNSE, "in_Timer");
 GILIGHT_inResol = shader_get_uniform(GISHADER.GILIGHT, "in_Resol");
 GILIGHT_inDistfld = shader_get_sampler_index(GISHADER.GILIGHT, "in_Distfld");
-GILIGHT_inGoldnse = shader_get_sampler_index(GISHADER.GILIGHT, "in_Goldnse");
+GILIGHT_inFastnse = shader_get_sampler_index(GISHADER.GILIGHT, "in_Fastnse");
 DENOISE_inResol = shader_get_uniform(GISHADER.DENOISE, "in_Resol");
 
 // Initialize all GI stage surfaces and GI temporal surfaces.

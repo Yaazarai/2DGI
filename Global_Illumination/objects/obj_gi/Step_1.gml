@@ -1,4 +1,4 @@
-gistage_time = current_time;
+gistage_time = current_time / 1000;
 
 gistage_dnse += mouse_wheel_down() - mouse_wheel_up();
 gistage_dnse = clamp(gistage_dnse, 0, 25);

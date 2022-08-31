@@ -5,7 +5,7 @@
     "path": "folders/Shaders.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Shd_GOLDNSE",
+  "name": "Shd_FASTNSE",
   "tags": [],
   "resourceType": "GMShader",
 }

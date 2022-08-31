@@ -71,12 +71,11 @@ draw_clear_alpha(c_black, 0);
 surface_reset_target();
 
 /*
-    STAGE 5: [GOLDNSE] Generate noise using Golden Ratio Static Noise.
+    STAGE 5: [FASTNSE] Generate noise using a basic random function.
 */
-surface_set_target(gistage_surf[GISTAGES.GOLDNSE]);
-    shader_set(GISHADER.GOLDNSE);
-    shader_set_uniform_f(GOLDNSE_inTimer, gistage_time);
-    shader_set_uniform_f(GOLDNSE_inResol, gistage_resw, gistage_resh);
+surface_set_target(gistage_surf[GISTAGES.FASTNSE]);
+    shader_set(GISHADER.FASTNSE);
+    shader_set_uniform_f(FASTNSE_inTimer, gistage_time);
     draw_surface(gistage_surf[GISTAGES.INITIAL],0,0);
     shader_reset();
 surface_reset_target();
@@ -89,7 +88,7 @@ surface_set_target(gistage_temp[(gistage_iter+1) mod gistage_tmpk]);
     shader_set(GISHADER.GILIGHT);
     shader_set_uniform_f(GILIGHT_inResol, gistage_resw, gistage_resh);
     texture_set_stage(GILIGHT_inDistfld, surface_get_texture(gistage_surf[GISTAGES.DISTFLD]));
-    texture_set_stage(GILIGHT_inGoldnse, surface_get_texture(gistage_surf[GISTAGES.GOLDNSE]));
+    texture_set_stage(GILIGHT_inFastnse, surface_get_texture(gistage_surf[GISTAGES.FASTNSE]));
     draw_surface(gistage_temp[gistage_iter mod gistage_tmpk],0,0);
     shader_reset();
 surface_reset_target();
@@ -142,13 +141,14 @@ if (gistage_curr == 3)
 /*STAGE 4*/draw_surface_ext(gistage_surf[GISTAGES.DISTFLD],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
 
 if (gistage_curr == 4)
-/*STAGE 5*/draw_surface_ext(gistage_surf[GISTAGES.GOLDNSE],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
+/*STAGE 5*/draw_surface_ext(gistage_surf[GISTAGES.FASTNSE],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
 
 if (gistage_curr == 5)
 /*STAGE 6*/draw_surface_ext(gistage_temp[gistage_iter mod gistage_tmpk],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
 
 if (gistage_curr == 6)
 /*STAGE 7*/draw_surface_ext(gistage_surf[GISTAGES.POSTPRC],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
+
 //*STAGE 8*/draw_surface_ext(gistage_surf[GISTAGES.DENOISE],0,0,gistage_rndw/gistage_resw,gistage_rndh/gistage_resh,0,c_white,1);
 
 draw_set_color(c_black);
