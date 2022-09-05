@@ -31,7 +31,6 @@ enum GISHADER {
     PREJUMP = Shd_PREJUMP, /* Pre-JumpFlood Setup */
     JUMPFLD = Shd_JUMPFLD, /* Jump Flood */
     DISTFLD = Shd_DISTFLD, /* Distance Field */
-    FASTNSE = Shd_FASTNSE, /* Random noise */
     GILIGHT = Shd_GILIGHT, /* Light bounce */
     DENOISE = Shd_DENOISE  /* Denoiser */
 }
@@ -56,7 +55,6 @@ gistage_curr =    0; // Current GI stage.
 // Grab shader variable uniforms for passing data to shaders.
 JUMPFLD_inJdist = shader_get_uniform(GISHADER.JUMPFLD, "in_Jdist");
 JUMPFLD_inResol = shader_get_uniform(GISHADER.JUMPFLD, "in_Resol");
-FASTNSE_inTimer = shader_get_uniform(GISHADER.FASTNSE, "in_Timer");
 GILIGHT_inResol = shader_get_uniform(GISHADER.GILIGHT, "in_Resol");
 GILIGHT_inDistfld = shader_get_sampler_index(GISHADER.GILIGHT, "in_Distfld");
 GILIGHT_inFastnse = shader_get_sampler_index(GISHADER.GILIGHT, "in_Fastnse");

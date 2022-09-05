@@ -1,13 +1,13 @@
 {
   "resources": [
     {"id":{"name":"Shd_DENOISE","path":"shaders/Shd_DENOISE/Shd_DENOISE.yy",},"order":7,},
-    {"id":{"name":"Shd_FASTNSE","path":"shaders/Shd_FASTNSE/Shd_FASTNSE.yy",},"order":4,},
     {"id":{"name":"Shd_GILIGHT","path":"shaders/Shd_GILIGHT/Shd_GILIGHT.yy",},"order":6,},
     {"id":{"name":"Shd_DISTFLD","path":"shaders/Shd_DISTFLD/Shd_DISTFLD.yy",},"order":2,},
     {"id":{"name":"Shd_JUMPFLD","path":"shaders/Shd_JUMPFLD/Shd_JUMPFLD.yy",},"order":1,},
     {"id":{"name":"Spr_SceneGI","path":"sprites/Spr_SceneGI/Spr_SceneGI.yy",},"order":0,},
     {"id":{"name":"Shd_PREJUMP","path":"shaders/Shd_PREJUMP/Shd_PREJUMP.yy",},"order":0,},
     {"id":{"name":"Obj_GI","path":"objects/Obj_GI/Obj_GI.yy",},"order":0,},
+    {"id":{"name":"Spr_Bluenoise","path":"sprites/Spr_Bluenoise/Spr_Bluenoise.yy",},"order":1,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [

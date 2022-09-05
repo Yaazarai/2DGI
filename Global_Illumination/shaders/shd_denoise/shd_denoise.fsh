@@ -1,31 +1,57 @@
 varying vec2 in_Coord;
-uniform vec2  in_Resol;
+uniform vec2 in_Resol;
+
+#define INV_SQRT_OF_2PI 0.39894228040143267793994605993439  // 1.0/SQRT_OF_2PI
+#define INV_PI 0.31830988618379067153776752674503
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  Copyright (c) 2018-2019 Michele Morrone
+//  All rights reserved.
+//
+//  https://michelemorrone.eu - https://BrutPitt.com
+//
+//  me@michelemorrone.eu - brutpitt@gmail.com
+//  twitter: @BrutPitt - github: BrutPitt
+//  
+//  https://github.com/BrutPitt/glslSmartDeNoise/
+//
+//  This software is distributed under the terms of the BSD 2-Clause license
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+vec4 smartDeNoise(sampler2D tex, vec2 uv, float sigma, float kSigma, float threshold) {
+    float radius = floor(kSigma*sigma + 0.5);
+    float radQ = radius * radius;
+    
+    float invSigmaQx2 = .5 / (sigma * sigma);      // 1.0 / (sigma^2 * 2.0)
+    float invSigmaQx2PI = INV_PI * invSigmaQx2;    // 1.0 / (sqrt(PI) * sigma)
+    
+    float invThresholdSqx2 = .5 / (threshold * threshold);     // 1.0 / (sigma^2 * 2.0)
+    float invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma)
+    
+    vec4 centrPx = texture2D(tex,uv);
+    
+    float zBuff = 0.0;
+    vec4 aBuff = vec4(0.0);
+    vec2 size = in_Resol;
+    
+    for(float x=-radius; x <= radius; x++) {
+        float pt = sqrt(radQ-x*x);  // pt = yRadius: have circular trend
+        for(float y=-pt; y <= pt; y++) {
+            vec2 d = vec2(x,y);
+
+            float blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI; 
+            
+            vec4 walkPx =  texture2D(tex,uv+d/size);
+
+            vec4 dC = walkPx-centrPx;
+            float deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;
+                                 
+            zBuff += deltaFactor;
+            aBuff += deltaFactor*walkPx;
+        }
+    }
+    return aBuff/zBuff;
+}
 
 void main() {
-    vec2 offsets[9];
-	offsets[0] = vec2(-1.0, -1.0);
-	offsets[1] = vec2(-1.0, 0.0);
-	offsets[2] = vec2(-1.0, 1.0);
-	offsets[3] = vec2(0.0, -1.0);
-	offsets[4] = vec2(0.0, 1.0);
-	offsets[5] = vec2(1.0, -1.0);
-	offsets[6] = vec2(1.0, 0.0);
-    offsets[7] = vec2(1.0, 1.0);
-    
-    vec3 noisepx = texture2D(gm_BaseTexture, in_Coord).rgb;
-    float nval = max(noisepx.r, max(noisepx.g, noisepx.b));
-    
-    vec3 colors = vec3(0.0);
-    float valinc = 0.0, dsgn = sign(nval);
-    for(int i = 0; i < 8; i++) {
-        vec3 denoise = texture2D(gm_BaseTexture, in_Coord + (offsets[i] * (1.0/in_Resol))).rgb;
-        float dval = max(denoise.r, max(denoise.g, denoise.b));
-        valinc += dval;
-        colors += denoise;
-        dsgn += sign(dval);
-    }
-    
-    colors += noisepx;
-    colors /= dsgn;
-    gl_FragColor = vec4(colors, 1.0);
+    gl_FragColor = smartDeNoise(gm_BaseTexture, in_Coord, 5.0, 1.0, 0.100);
 }

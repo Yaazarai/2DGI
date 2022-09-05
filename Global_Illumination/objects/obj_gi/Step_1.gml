@@ -1,7 +1,4 @@
-gistage_time = current_time / 1000;
-
-gistage_dnse += mouse_wheel_down() - mouse_wheel_up();
-gistage_dnse = clamp(gistage_dnse, 0, 25);
+gistage_time += keyboard_check(vk_space);
 
 gistage_curr += keyboard_check_pressed(vk_right) - keyboard_check_pressed(vk_left);
-gistage_curr = clamp(gistage_curr, 0, 6);
+gistage_curr = clamp(gistage_curr, 0, 7);
