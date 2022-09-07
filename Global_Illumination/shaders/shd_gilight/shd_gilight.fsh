@@ -24,12 +24,21 @@ bool surfacemarch(vec2 pix, vec2 dir, float noise, out vec2 hitpos, out vec3 hit
         if (RANGE(raypos.x, 0.0, 1.0) || RANGE(raypos.y, 0.0, 1.0)) return false;
         if (dst <= EPSILON) {
             // Random sample either surface emitters or previous frame emission pixel.
+            vec3 srceCol = texture2D(gm_BaseTexture, raypos).rgb;
+            float srceValue = max(srceCol.r, max(srceCol.g, srceCol.b));
+            vec2 srcePos = raypos;
+            
             raypos *= aspect;
-            raypos -= (ray * EPSILON * noise);
+            raypos -= (dir * ray * noise);
             raypos /= aspect;
             
-            hitcol = texture2D(gm_BaseTexture, raypos).rgb;
-            hitpos = raypos;
+            vec3 destCol = texture2D(gm_BaseTexture, raypos).rgb;
+            float destValue = max(destCol.r, max(destCol.g, destCol.b));
+            vec2 destPos = raypos;
+            
+            float check = step(destValue, srceValue);
+            hitcol = (check > 0.0)? srceCol : mix(destCol, srceCol, 0.5);
+            hitpos = (check > 0.0)? srcePos : destPos;
             return true;
         }
     }
@@ -45,7 +54,6 @@ vec3 tonemap(vec3 color, float dist) {
 }
 
 void main() {
-    vec2 pixelPos = in_Coord * in_Resol;
     vec3  colors = vec3(0.0);
     float emissv = 0.0,
         gnoise = texture2D(in_Fastnse, in_Coord).r,
